@@ -10,6 +10,8 @@ import {
     ModalHeader,
     ModalBody,
     useDisclosure,
+    Divider,
+    Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import TitleCard from "../components/TitleCard";
@@ -136,6 +138,7 @@ export default function Home() {
                     flexWrap="wrap"
                     width="100%"
                     marginTop={{ base: "1.5em" }}
+                    marginBottom={{ base: "1.5em" }}
                 >
                     {titles.map((item) => {
                         return (
@@ -165,6 +168,12 @@ export default function Home() {
                     })}
                 </Flex>
             </Tabs>
+            <Divider width="95%" />
+            <Text width="100%" textAlign="center" marginY={{ base: "2em" }}>
+                (C) 2022, Reflix. <br />
+                All rights reserved. Reflix trademark registered under
+                Vishruthh.
+            </Text>
             <LoadingModal display={loading} />
             <ModalUtil
                 isOpen={movieModalIsOpen}
