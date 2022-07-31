@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Reflix" id="Project_20a9" database="PostgreSQL" >
+	<schema name="public" >
+		<table name="genres" >
+			<column name="genreid" type="bigserial" jt="-5" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_genres_genreid" unique="PRIMARY_KEY" >
+				<column name="genreid" />
+			</index>
+		</table>
+		<table name="genretitles" >
+			<column name="genretitleid" type="bigserial" jt="-5" mandatory="y" />
+			<column name="genreid" type="bigint" jt="-5" mandatory="y" />
+			<column name="titleid" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_genretitles_genretitleid" unique="PRIMARY_KEY" >
+				<column name="genretitleid" />
+			</index>
+			<fk name="fk_genretitles_genres" to_schema="public" to_table="genres" delete_action="cascade" update_action="cascade" >
+				<fk_column name="genreid" pk="genreid" />
+			</fk>
+			<fk name="fk_genretitles_titles" to_schema="public" to_table="titles" delete_action="cascade" update_action="cascade" >
+				<fk_column name="titleid" pk="titleid" />
+			</fk>
+		</table>
+		<table name="titles" >
+			<column name="titleid" type="bigserial" jt="-5" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="image" type="text" jt="12" mandatory="y" />
+			<column name="video" type="text" jt="12" mandatory="y" />
+			<index name="pk_titles_titleid" unique="PRIMARY_KEY" >
+				<column name="titleid" />
+			</index>
+		</table>
+		<sequence name="genres_genreid_seq" options="START WITH 1" />
+		<sequence name="genretitles_genretitleid_seq" options="START WITH 1" />
+		<sequence name="titles_titleid_seq" options="START WITH 1" />
+	</schema>
+	<connector name="Reflix" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.2.14.jar" driver_desc="Standard" host="localhost" port="5432" instance="Reflix" user="postgres" passwd="TWFkaGF2YUBQT1NUR1JF" />
+	<layout name="Default Layout" id="Layout_86d" show_relation="columns" >
+		<entity schema="public" name="genres" color="C1D8EE" x="48" y="128" />
+		<entity schema="public" name="genretitles" color="C1D8EE" x="208" y="128" />
+		<entity schema="public" name="titles" color="C1D8EE" x="432" y="48" />
+		<script name="SQL_Editor" id="Editor_1221" language="SQL" >
+			<string><![CDATA[CREATE  TABLE "public".genres ( 
+	genreid              bigserial  NOT NULL ,
+	name                 varchar(255)  NOT NULL ,
+	CONSTRAINT pk_genres_genreid PRIMARY KEY ( genreid )
+ );
+
+CREATE  TABLE "public".titles ( 
+	titleid              bigserial  NOT NULL ,
+	name                 varchar(255)  NOT NULL ,
+	image                text  NOT NULL ,
+	video                text  NOT NULL ,
+	CONSTRAINT pk_titles_titleid PRIMARY KEY ( titleid )
+ );
+
+CREATE  TABLE "public".genretitles ( 
+	genretitleid         bigserial  NOT NULL ,
+	genreid              bigint  NOT NULL ,
+	titleid              bigint  NOT NULL ,
+	CONSTRAINT pk_genretitles_genretitleid PRIMARY KEY ( genretitleid ),
+	CONSTRAINT fk_genretitles_genres FOREIGN KEY ( genreid ) REFERENCES "public".genres( genreid ) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_genretitles_titles FOREIGN KEY ( titleid ) REFERENCES "public".titles( titleid ) ON DELETE CASCADE ON UPDATE CASCADE
+ );
+
+INSERT INTO "public".genres( genreid, name ) VALUES ( 1, 'Action' ); 
+INSERT INTO "public".genres( genreid, name ) VALUES ( 2, 'Horror' ); 
+INSERT INTO "public".genres( genreid, name ) VALUES ( 3, 'Comedy' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 1, 'John Wick', 'https://m.media-amazon.com/images/M/MV5BMTU2NjA1ODgzMF5BMl5BanBnXkFtZTgwMTM2MTI4MjE@._V1_.jpg', 'https://www.youtube.com/watch?v=C0BMx-qxsP4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 2, 'The Batman', 'https://i.pinimg.com/originals/95/45/b2/9545b266a6a53d0d43c3bbab4e2f4cca.jpg', 'https://www.youtube.com/watch?v=mqqft2x_Aa4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 3, 'Top Gun', 'https://cdn.shopify.com/s/files/1/0151/0741/products/RG57_Copy_1024x1024.jpg?v=1578633323', 'https://www.youtube.com/watch?v=ArOMXELHiLw' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 4, 'The Dark Knight', 'https://cdn.europosters.eu/image/750/posters/batman-dark-knight-joker-i13945.jpg', 'https://www.youtube.com/watch?v=EXeTwQWrcwY' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 5, 'The Gray Man', 'https://m.media-amazon.com/images/M/MV5BOWY4MmFiY2QtMzE1YS00NTg1LWIwOTQtYTI4ZGUzNWIxNTVmXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg', 'https://www.youtube.com/watch?v=BmllggGO4pM' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 6, 'Dunkirk', 'https://img.fruugo.com/product/6/53/29794536_max.jpg', 'https://www.youtube.com/watch?v=T7O7BtBnsG4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 7, 'Tenet', 'https://media.comicbook.com/2019/12/emkmaqvuwaavmr1-1200523.jpeg?auto=webp&width=607&height=900&crop=607:900,smart', 'https://www.youtube.com/watch?v=LdOM0x0XDMo' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 8, 'Dune', 'https://imageio.forbes.com/specials-images/imageserve/61116cea2313e8bae55a536a/-Dune-/0x0.jpg?format=jpg&width=960', 'https://www.youtube.com/watch?v=n9xhJrPXop4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 9, 'Friends', 'https://rukminim1.flixcart.com/image/832/832/jst930w0/poster/6/z/f/medium-friends-tvshow-friends-cast-tv-show-poster-for-room-original-imafe8mhtyghav4c.jpeg?q=70', 'https://www.youtube.com/watch?v=Gpa5S8DgPzs' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 10, 'The Office', 'https://rukminim1.flixcart.com/image/416/416/k6nxrbk0/poster/z/a/x/medium-the-office-framed-poster-for-room-office-10x13-inch-original-imafp2yvhp4zmtmy.jpeg?q=70', 'https://www.youtube.com/watch?v=2iKZmRR9AR4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 11, 'Ted Lasso', 'https://www.justwatch.com/images/poster/246950733/s332/season-3', 'https://www.youtube.com/watch?v=3u7EIiohs6U' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 12, 'Modern Family', 'https://m.media-amazon.com/images/I/51d023DH+cL.jpg', 'https://www.google.com/search?q=original+trailer+Modern+Family&oq=original+trailer+Modern+Family&aqs=chrome..69i57j33i22i29i30l9.19117j0j4&sourceid=chrome&ie=UTF-8' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 13, 'Thor: Ragnarok', 'https://cdn.flickeringmyth.com/wp-content/uploads/2017/11/Thor-Ragnarok-poster.jpg', 'https://www.youtube.com/watch?v=ue80QwXMRHg' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 14, 'Dumb & Dumber', 'https://m.media-amazon.com/images/M/MV5BMTk5NTI2ODc0M15BMl5BanBnXkFtZTYwMzMyMTk4._V1_.jpg', 'https://www.youtube.com/watch?v=l13yPhimE3o' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 15, 'Coming to America', 'https://upload.wikimedia.org/wikipedia/en/3/38/ComingtoAmerica1988MoviePoster.jpg', 'https://www.youtube.com/watch?v=ZDme5Y5E-bI' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 16, 'Rushmore', 'https://img.fruugo.com/product/6/27/14400276_max.jpg', 'https://www.youtube.com/watch?v=GxCNDpvGyss' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 17, 'Insidious', 'https://m.media-amazon.com/images/M/MV5BMTYyOTAxMDA0OF5BMl5BanBnXkFtZTcwNzgwNTc1NA@@._V1_.jpg', 'https://www.youtube.com/watch?v=zuZnRUcoWos&t=1s' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 18, 'The Conjuring', 'https://m.media-amazon.com/images/M/MV5BMTM3NjA1NDMyMV5BMl5BanBnXkFtZTcwMDQzNDMzOQ@@._V1_.jpg', 'https://www.youtube.com/watch?v=ejMMn0t58Lc' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 19, 'The Shining', 'https://i.pinimg.com/originals/ff/2b/40/ff2b40c00b37f68ad3bd2f5f8e26bc59.jpg', 'https://www.youtube.com/watch?v=S014oGZiSdI' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 20, 'The Ring', 'https://m.media-amazon.com/images/M/MV5BYTQzZjhiYjYtNDMzOS00ZjNiLTg2MGMtYWZmYWNjN2U5YTVmXkEyXkFqcGdeQXVyNjI3OTcxOTU@._V1_.jpg', 'https://www.youtube.com/watch?v=yzR2GY-ew8I' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 21, 'IT', 'https://cdn.europosters.eu/image/750/posters/it-georgie-i57743.jpg', 'https://www.youtube.com/watch?v=xKJmEC5ieOk' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 22, 'A Quiet Place', 'https://i2.wp.com/www.socialnews.xyz/wp-content/uploads/2021/05/05/a-quiet-place-part-II-Movie-New-HD-Poster-.jpg?quality=80&zoom=1&ssl=1', 'https://www.youtube.com/watch?v=WR7cc5t7tv8' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 23, 'It Follows', 'https://m.media-amazon.com/images/M/MV5BMmU0MjBlYzYtZWY0MC00MjliLWI3ZmUtMzhlZDVjMWVmYWY4XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg', 'https://www.youtube.com/watch?v=HkZYbOH0ujw' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 24, 'The Witch', 'https://static.onecms.io/wp-content/uploads/sites/6/2015/12/the-witch.jpg', 'https://www.youtube.com/watch?v=iQXmlf3Sefg' ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 1, 1, 1 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 2, 1, 2 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 3, 1, 3 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 4, 1, 4 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 5, 1, 5 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 6, 1, 6 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 7, 1, 7 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 8, 1, 8 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 9, 2, 9 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 10, 2, 10 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 11, 2, 11 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 12, 2, 12 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 13, 2, 13 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 14, 2, 14 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 15, 2, 15 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 16, 2, 16 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 17, 3, 17 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 18, 3, 18 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 19, 3, 19 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 20, 3, 20 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 21, 3, 21 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 22, 3, 22 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 23, 3, 23 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 24, 3, 24 ); ]]></string>
+		</script>
+		<script name="SQL_Editor_001" id="Editor_1948" language="SQL" >
+			<string><![CDATA[CREATE SEQUENCE "public".genres_genreid_seq START WITH 1;
+
+CREATE SEQUENCE "public".genretitles_genretitleid_seq START WITH 1;
+
+CREATE SEQUENCE "public".titles_titleid_seq START WITH 1;
+
+CREATE  TABLE "public".genres ( 
+	genreid              bigserial  NOT NULL ,
+	name                 varchar(255)  NOT NULL ,
+	CONSTRAINT pk_genres_genreid PRIMARY KEY ( genreid )
+ );
+
+CREATE  TABLE "public".titles ( 
+	titleid              bigserial  NOT NULL ,
+	name                 varchar(255)  NOT NULL ,
+	image                text  NOT NULL ,
+	video                text  NOT NULL ,
+	CONSTRAINT pk_titles_titleid PRIMARY KEY ( titleid )
+ );
+
+CREATE  TABLE "public".genretitles ( 
+	genretitleid         bigserial  NOT NULL ,
+	genreid              bigint  NOT NULL ,
+	titleid              bigint  NOT NULL ,
+	CONSTRAINT pk_genretitles_genretitleid PRIMARY KEY ( genretitleid ),
+	CONSTRAINT fk_genretitles_genres FOREIGN KEY ( genreid ) REFERENCES "public".genres( genreid ) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_genretitles_titles FOREIGN KEY ( titleid ) REFERENCES "public".titles( titleid ) ON DELETE CASCADE ON UPDATE CASCADE
+ );
+
+INSERT INTO "public".genres( genreid, name ) VALUES ( 1, 'Action' ); 
+INSERT INTO "public".genres( genreid, name ) VALUES ( 2, 'Horror' ); 
+INSERT INTO "public".genres( genreid, name ) VALUES ( 3, 'Comedy' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 1, 'John Wick', 'https://m.media-amazon.com/images/M/MV5BMTU2NjA1ODgzMF5BMl5BanBnXkFtZTgwMTM2MTI4MjE@._V1_.jpg', 'https://www.youtube.com/watch?v=C0BMx-qxsP4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 2, 'The Batman', 'https://i.pinimg.com/originals/95/45/b2/9545b266a6a53d0d43c3bbab4e2f4cca.jpg', 'https://www.youtube.com/watch?v=mqqft2x_Aa4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 3, 'Top Gun', 'https://cdn.shopify.com/s/files/1/0151/0741/products/RG57_Copy_1024x1024.jpg?v=1578633323', 'https://www.youtube.com/watch?v=ArOMXELHiLw' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 4, 'The Dark Knight', 'https://cdn.europosters.eu/image/750/posters/batman-dark-knight-joker-i13945.jpg', 'https://www.youtube.com/watch?v=EXeTwQWrcwY' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 5, 'The Gray Man', 'https://m.media-amazon.com/images/M/MV5BOWY4MmFiY2QtMzE1YS00NTg1LWIwOTQtYTI4ZGUzNWIxNTVmXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg', 'https://www.youtube.com/watch?v=BmllggGO4pM' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 6, 'Dunkirk', 'https://img.fruugo.com/product/6/53/29794536_max.jpg', 'https://www.youtube.com/watch?v=T7O7BtBnsG4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 7, 'Tenet', 'https://media.comicbook.com/2019/12/emkmaqvuwaavmr1-1200523.jpeg?auto=webp&width=607&height=900&crop=607:900,smart', 'https://www.youtube.com/watch?v=LdOM0x0XDMo' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 8, 'Dune', 'https://imageio.forbes.com/specials-images/imageserve/61116cea2313e8bae55a536a/-Dune-/0x0.jpg?format=jpg&width=960', 'https://www.youtube.com/watch?v=n9xhJrPXop4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 9, 'Friends', 'https://rukminim1.flixcart.com/image/832/832/jst930w0/poster/6/z/f/medium-friends-tvshow-friends-cast-tv-show-poster-for-room-original-imafe8mhtyghav4c.jpeg?q=70', 'https://www.youtube.com/watch?v=Gpa5S8DgPzs' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 10, 'The Office', 'https://rukminim1.flixcart.com/image/416/416/k6nxrbk0/poster/z/a/x/medium-the-office-framed-poster-for-room-office-10x13-inch-original-imafp2yvhp4zmtmy.jpeg?q=70', 'https://www.youtube.com/watch?v=2iKZmRR9AR4' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 11, 'Ted Lasso', 'https://www.justwatch.com/images/poster/246950733/s332/season-3', 'https://www.youtube.com/watch?v=3u7EIiohs6U' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 12, 'Modern Family', 'https://m.media-amazon.com/images/I/51d023DH+cL.jpg', 'https://www.google.com/search?q=original+trailer+Modern+Family&oq=original+trailer+Modern+Family&aqs=chrome..69i57j33i22i29i30l9.19117j0j4&sourceid=chrome&ie=UTF-8' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 13, 'Thor: Ragnarok', 'https://cdn.flickeringmyth.com/wp-content/uploads/2017/11/Thor-Ragnarok-poster.jpg', 'https://www.youtube.com/watch?v=ue80QwXMRHg' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 14, 'Dumb & Dumber', 'https://m.media-amazon.com/images/M/MV5BMTk5NTI2ODc0M15BMl5BanBnXkFtZTYwMzMyMTk4._V1_.jpg', 'https://www.youtube.com/watch?v=l13yPhimE3o' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 15, 'Coming to America', 'https://upload.wikimedia.org/wikipedia/en/3/38/ComingtoAmerica1988MoviePoster.jpg', 'https://www.youtube.com/watch?v=ZDme5Y5E-bI' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 16, 'Rushmore', 'https://img.fruugo.com/product/6/27/14400276_max.jpg', 'https://www.youtube.com/watch?v=GxCNDpvGyss' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 17, 'Insidious', 'https://m.media-amazon.com/images/M/MV5BMTYyOTAxMDA0OF5BMl5BanBnXkFtZTcwNzgwNTc1NA@@._V1_.jpg', 'https://www.youtube.com/watch?v=zuZnRUcoWos&t=1s' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 18, 'The Conjuring', 'https://m.media-amazon.com/images/M/MV5BMTM3NjA1NDMyMV5BMl5BanBnXkFtZTcwMDQzNDMzOQ@@._V1_.jpg', 'https://www.youtube.com/watch?v=ejMMn0t58Lc' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 19, 'The Shining', 'https://i.pinimg.com/originals/ff/2b/40/ff2b40c00b37f68ad3bd2f5f8e26bc59.jpg', 'https://www.youtube.com/watch?v=S014oGZiSdI' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 20, 'The Ring', 'https://m.media-amazon.com/images/M/MV5BYTQzZjhiYjYtNDMzOS00ZjNiLTg2MGMtYWZmYWNjN2U5YTVmXkEyXkFqcGdeQXVyNjI3OTcxOTU@._V1_.jpg', 'https://www.youtube.com/watch?v=yzR2GY-ew8I' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 21, 'IT', 'https://cdn.europosters.eu/image/750/posters/it-georgie-i57743.jpg', 'https://www.youtube.com/watch?v=xKJmEC5ieOk' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 22, 'A Quiet Place', 'https://i2.wp.com/www.socialnews.xyz/wp-content/uploads/2021/05/05/a-quiet-place-part-II-Movie-New-HD-Poster-.jpg?quality=80&zoom=1&ssl=1', 'https://www.youtube.com/watch?v=WR7cc5t7tv8' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 23, 'It Follows', 'https://m.media-amazon.com/images/M/MV5BMmU0MjBlYzYtZWY0MC00MjliLWI3ZmUtMzhlZDVjMWVmYWY4XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg', 'https://www.youtube.com/watch?v=HkZYbOH0ujw' ); 
+INSERT INTO "public".titles( titleid, name, image, video ) VALUES ( 24, 'The Witch', 'https://static.onecms.io/wp-content/uploads/sites/6/2015/12/the-witch.jpg', 'https://www.youtube.com/watch?v=iQXmlf3Sefg' ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 1, 1, 1 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 2, 1, 2 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 3, 1, 3 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 4, 1, 4 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 5, 1, 5 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 6, 1, 6 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 7, 1, 7 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 8, 1, 8 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 9, 2, 9 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 10, 2, 10 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 11, 2, 11 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 12, 2, 12 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 13, 2, 13 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 14, 2, 14 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 15, 2, 15 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 16, 2, 16 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 17, 3, 17 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 18, 3, 18 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 19, 3, 19 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 20, 3, 20 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 21, 3, 21 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 22, 3, 22 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 23, 3, 23 ); 
+INSERT INTO "public".genretitles( genretitleid, genreid, titleid ) VALUES ( 24, 3, 24 ); ]]></string>
+		</script>
+	</layout>
+</project>

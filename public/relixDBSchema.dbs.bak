@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Reflix" id="Project_20a9" database="PostgreSQL" >
+	<schema name="public" >
+		<table name="genres" >
+			<column name="genreid" type="bigserial" jt="-5" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_genres_genreid" unique="PRIMARY_KEY" >
+				<column name="genreid" />
+			</index>
+		</table>
+		<table name="genretitles" >
+			<column name="genretitleid" type="bigserial" jt="-5" mandatory="y" />
+			<column name="genreid" type="bigint" jt="-5" mandatory="y" />
+			<column name="titleid" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_genretitles_genretitleid" unique="PRIMARY_KEY" >
+				<column name="genretitleid" />
+			</index>
+			<fk name="fk_genretitles_genres" to_schema="public" to_table="genres" delete_action="cascade" update_action="cascade" >
+				<fk_column name="genreid" pk="genreid" />
+			</fk>
+			<fk name="fk_genretitles_titles" to_schema="public" to_table="titles" delete_action="cascade" update_action="cascade" >
+				<fk_column name="titleid" pk="titleid" />
+			</fk>
+		</table>
+		<table name="titles" >
+			<column name="titleid" type="bigserial" jt="-5" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="image" type="text" jt="12" mandatory="y" />
+			<column name="video" type="text" jt="12" mandatory="y" />
+			<index name="pk_titles_titleid" unique="PRIMARY_KEY" >
+				<column name="titleid" />
+			</index>
+		</table>
+	</schema>
+	<connector name="Reflix" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.2.14.jar" driver_desc="Standard" host="localhost" port="5432" instance="Reflix" user="postgres" passwd="TWFkaGF2YUBQT1NUR1JF" />
+	<layout name="Default Layout" id="Layout_86d" show_relation="columns" >
+		<entity schema="public" name="genres" color="C1D8EE" x="176" y="416" />
+		<entity schema="public" name="genretitles" color="C1D8EE" x="336" y="416" />
+		<entity schema="public" name="titles" color="C1D8EE" x="560" y="336" />
+		<callout x="48" y="48" pointer="Round" >
+			<comment><![CDATA[Create new tables from the right-click pop-up, new foreign keys by drag and drop of one column over the Pk column.
+For a better understanding of the schema create multiple layouts (diagrams) with the same or different tables.]]></comment>
+		</callout>
+	</layout>
+</project>
